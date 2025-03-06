@@ -1,0 +1,40 @@
+# 本文件仅作为实例，请根据实际服务修改此文件内容
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "deployment.name" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ template "chartName" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.app.replicasCount }}
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - image: {{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}
+        name: {{ .Values.app.containerName }}
+        resources:
+{{toYaml .Values.app.resources | indent 12}}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: time
+      nodeSelector:
+{{toYaml .Values.nodeSelector | indent 8}}
+      restartPolicy: Always
+      volumes:
+      - name: time
+        hostPath:
+          path: /etc/localtime
+      # ... 更多配置 ...

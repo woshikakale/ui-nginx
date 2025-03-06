@@ -1,0 +1,25 @@
+# 定义变量。 在 templates 目录下的文件被引用。 引用单个值 {{ .Values.app.name }}， 引用片段 {{toYaml .Values.app.resources | indent 12}}
+# 本文件仅作为实例，请根据实际服务修改此文件内容
+app:
+  replicasCount: 1
+  name: ${SERVICE_NAME}
+  appName: ${SERVICE_NAME}
+  containerName: ${SERVICE_NAME}
+  serviceName: ${SERVICE_NAME}-svc
+  image:
+    repository: os-harbor-svc.default.svc.cloudos:443/helm/${SERVICE_NAME}
+    tag: "${BUILD_VERSION}"
+  resources:
+    limits:
+      cpu: "4"
+      memory: 4Gi
+    requests:
+      cpu: "500m"
+      memory: 1Gi
+  service:
+    type: ClusterIP
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: 8080

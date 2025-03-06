@@ -1,0 +1,11 @@
+name: ${SERVICE_NAME}
+version: ${BUILD_VERSION}
+label: ${SERVICE_NAME}
+feature: 暂无
+type: application
+description: ${SERVICE_NAME} ${BUILD_VERSION}
+image:
+  ${SERVICE_NAME}:
+    repository: ${SERVICE_NAME}
+    tag: ${BUILD_VERSION}
+    file: ${SERVICE_NAME}-${BUILD_VERSION}.tar
